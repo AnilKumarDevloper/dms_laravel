@@ -1,7 +1,7 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: Build and deploy PHP app to Azure Web App - dmsproduction
+name: Build and deploy PHP app to Azure Web App - dms-production
 
 on:
   push:
@@ -12,6 +12,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read #This is required for actions/checkout
 
     steps:
       - uses: actions/checkout@v4
@@ -48,6 +50,7 @@ jobs:
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     permissions:
       id-token: write #This is required for requesting the JWT
+      contents: read #This is required for actions/checkout
 
     steps:
       - name: Download artifact from build job
@@ -61,15 +64,15 @@ jobs:
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_AB041EDAA9A04ABD91F22B00C3FDE884 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_385F40480FA9467C82C149B5EEB3E2D2 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_C2142336A314430AB7D478B639F7712F }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_53DCCC7B63EB495F9D4DF0087E4866E0 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_8DF25EC243B1477DA9134CA059BF4DDE }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_311DC7C3A7F54C439634402386F2AEFE }}
 
       - name: 'Deploy to Azure Web App'
         uses: azure/webapps-deploy@v3
         id: deploy-to-webapp
         with:
-          app-name: 'dmsproduction'
+          app-name: 'dms-production'
           slot-name: 'Production'
           package: .
           
