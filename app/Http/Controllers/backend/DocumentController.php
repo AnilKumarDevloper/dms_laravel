@@ -119,7 +119,7 @@ class DocumentController extends Controller{
             $documentFile->move($documentPath, $documentName); 
             Document::where('id', $document->id)->update([
                 'doc_file' => $documentName,
-                'doc_path' => 'public/folders/' . $main_folder->name . '/' . $sub_folder->name, 
+                'doc_path' => 'folders/' . $main_folder->name . '/' . $sub_folder->name, 
             ]);
         }
         return redirect()->route('backend.document.index')->with('created', 'Document has been uploaded successfully.');
@@ -270,7 +270,7 @@ class DocumentController extends Controller{
             $request->file('document')->move(public_path('folders/'.$main_folder->name.'/'.$sub_folder->name), $document_name); 
             Document::where('id', $id)->update([
                'doc_file'  => $document_name,
-               'doc_path' => 'public/folders/'.$main_folder->name.'/'.$sub_folder->name
+               'doc_path' => 'folders/'.$main_folder->name.'/'.$sub_folder->name
             ]);
         }
         // $this->documentAuditService->CreateDocumentAudit(
@@ -448,7 +448,7 @@ class DocumentController extends Controller{
             $request->file('document')->move(public_path('folders/'.$main_folder->name.'/'.$sub_folder->name), $document_name); 
             Document::where('id', $document_id->id)->update([
                'doc_file'  => $document_name,
-               'doc_path' => 'public/folders/'.$main_folder->name.'/'.$sub_folder->name
+               'doc_path' => 'folders/'.$main_folder->name.'/'.$sub_folder->name
             ]);
         }
         return redirect()->route('backend.folders.view_doc_list',[Crypt::encrypt($m_id), Crypt::encrypt($s_id)]);

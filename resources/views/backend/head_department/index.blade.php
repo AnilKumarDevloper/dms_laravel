@@ -68,7 +68,7 @@
                     </li>
                 </ol>
             </nav>
-                <h1 class="mb-0 fw-bold">All Departments</h1>
+            <h1 class="mb-0 fw-bold">All Departments</h1>
             </div> 
         </div>
     </div>
@@ -88,7 +88,7 @@
                                         <th>Email</th>
                                         <th>Department</th>
                                         <th>Status</th>
-                                        <th>Created On</th>
+                                        <th>Created On</th> 
                                         <th>Action</th> 
                                      </tr>
                                 </thead>
@@ -98,7 +98,7 @@
                                         @foreach($head_users as $head_user)
                                         <tr>
                                             <td>{{$count++}}</td>
-                                            <td><img src="{{$head_user->profile_image ?? url('assets/backend/assets/images/users/default_user.png')}}" style="height: 40px; border-radius: 21px; overflow: hidden;"></td>
+                                            <td><img src="{{$head_user->profile_image != '' ? url('assets/backend/assets/images/upload/profile_image/'.$head_user->profile_image) : url('assets/backend/assets/images/users/default_user.png')}}" style="height: 40px; border-radius: 21px; overflow: hidden;"></td>
                                             <td>{{$head_user->first_name ?? ''}} {{$head_user->last_name ?? ''}}</td>
                                             <td>{{$head_user->phone ?? ''}}</td>
                                             <td>{{$head_user->email ?? ''}}</td>

@@ -39,7 +39,6 @@ class HeadDepartmentController extends Controller{
             if(Auth::user()->role_type_id == 1){
                 $head_department_type = DepartmentType::where('status', 1)->get();  
                 $head_department = User::where('id', $decrypt_id)->first();
-                
                 return view('backend.head_department.edit', compact('head_department', 'head_department_type'));
             }else{
                 return response()->view('errors.405', [], 405);

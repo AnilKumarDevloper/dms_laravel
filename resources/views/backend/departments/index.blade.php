@@ -40,7 +40,9 @@
                                         <th>Department Full Name</th> 
                                         <th>Department Short Name</th> 
                                         <th>Status</th>
+                                        @if(Auth::user()->role_type_id == 1)
                                         <th>Action</th>
+                                        @endif
                                     </tr>
                                 </thead>
                             <tbody id="add_tr">
@@ -115,30 +117,31 @@
         try{
             if (response.ok){
                 const responseData = await response.json();
-                let data = responseData.data;  // Original data
-                let filteredData = [...data];  // Initially, filteredData is the same as data
+                let data = responseData.data;
+                let filteredData = [...data];
                 const add_tr = document.getElementById('add_tr');
                 const searchInput = document.getElementById('searchTableData');
                 const pagination = document.getElementById('pagination');
                 const rowsPerPage = 10;
                 let currentPage = 1;
-                // Render the table with filtered data for pagination
                 function renderTable(rows){
                     add_tr.innerHTML = '';
                     rows.forEach((tr_element, index) =>{
-                        add_tr.innerHTML += `
-                        <tr>
+                        let edit_url = "{{route('backend.department.edit', [':id'])}}";
+                        edit_url = edit_url.replace(':id', tr_element.encrypt_id);
+                       let rowHtml = `<tr>
                             <td>${index + 1}</td>
                             <td>${tr_element.name || 'N/A'}</td>
                             <td>${tr_element.short_name || 'N/A'}</td>
                             <td>
                                 <div class="form-check form-switch">
-                                    <input class="form-check-input" type="checkbox" id="status" style="width:40px" data-id="${tr_element.id}" ${tr_element.status == 1 ? "checked":""}>
+                                    <input class="form-check-input" type="checkbox" id="status" style="width:40px" data-id="${tr_element.id}" ${tr_element.status == 1 ? "checked":""} ${responseData.role_type_id != 1 ? 'disabled':''}>
                                 </div>
-                             </td>
-                            <td>
+                             </td>`;
+                             if(responseData.role_type_id == 1){
+                              rowHtml += `<td>
                                 <div class="button-container">
-                                    <a href="">
+                                    <a href="${edit_url}">
                                         <button class="editBtn">
                                             <svg height="1em" viewBox="0 0 512 512">
                                                 <path d="M410.3 231l11.3-11.3-33.9-33.9-62.1-62.1L291.7 89.8l-11.3 11.3-22.6 22.6L58.6 322.9c-10.4 10.4-18 23.3-22.2 37.4L1 480.7c-2.5 8.4-.2 17.5 6.1 23.7s15.3 8.5 23.7 6.1l120.3-35.4c14.1-4.2 27-11.8 37.4-22.2L387.7 253.7 410.3 231zM160 399.4l-9.1 22.7c-4 3.1-8.5 5.4-13.3 6.9L59.4 452l23-78.1c1.4-4.9 3.8-9.4 6.9-13.3l22.7-9.1v32c0 8.8 7.2 16 16 16h32zM362.7 18.7L348.3 33.2 325.7 55.8 314.3 67.1l33.9 33.9 62.1 62.1 33.9 33.9 11.3-11.3 22.6-22.6 14.5-14.5c25-25 25-65.5 0-90.5L453.3 18.7c-25-25-65.5-25-90.5 0zm-47.4 168l-144 144c-6.2 6.2-16.4 6.2-22.6 0s-6.2-16.4 0-22.6l144-144c6.2-6.2 16.4-6.2 22.6 0s6.2 16.4 0 22.6z"></path>
@@ -146,16 +149,17 @@
                                         </button>
                                     </a>
                                     <a href="javascript:void(0)">
-                                        <button class="button" id="delete_btn" data-id="">
+                                        <button class="button" id="delete_btn" data-id="${tr_element.id}">
                                             <i class="ri-delete-bin-line" style="color:#fff;"></i>
                                         </button>
                                     </a>
                                 </div>
-                            </td>
-                        </tr>`;
+                            </td>`;
+                        }
+                        rowHtml += `</tr>`;
+                        add_tr.innerHTML += rowHtml;
                     });
                 }
-                // Function to create pagination
                 function renderPagination(filteredData){
                     pagination.innerHTML = '';
                     const totalPages = Math.ceil(filteredData.length / rowsPerPage);
@@ -167,11 +171,9 @@
                         </li>`;
                     }
                 }
-                // Show data for the current page
                 function showPage(pageData){
                     renderTable(pageData);
                 }
-                // Function to paginate data
                 function paginateData(page){
                     currentPage = page;
                     const startIndex = (currentPage - 1) * rowsPerPage;
@@ -179,21 +181,17 @@
                     showPage(paginatedData);
                     renderPagination(filteredData);
                 }
-                // Initial render
                 paginateData(currentPage);
-                // Handle search input
                 searchInput.addEventListener('input', function (){
                     const searchValue = searchInput.value.toLowerCase();
                     filteredData = data.filter(item =>{
-                        // Safe check for 'name' and 'short_name' being null or undefined
                         const name = item.name ? item.name.toLowerCase() : '';
                         const shortName = item.short_name ? item.short_name.toLowerCase() : '';
                         return name.includes(searchValue) || shortName.includes(searchValue);
                     });
-                    currentPage = 1;  // Reset to first page after search
+                    currentPage = 1;
                     paginateData(currentPage);
                 });
-                // Handle page click for pagination
                 pagination.addEventListener('click', function (event){
                     if (event.target.tagName.toLowerCase() === 'a'){
                         const page = parseInt(event.target.dataset.page);
@@ -255,7 +253,7 @@
             showCancelButton: true,
             confirmButtonColor: "#3085d6",
             cancelButtonColor: "#d33",
-            confirmButtonText: "Yes, delete it!"
+            confirmButtonText: "Yes, change it!"
         }).then(async (result) => {
             if (result.isConfirmed){
                 const response = await fetch(url, {

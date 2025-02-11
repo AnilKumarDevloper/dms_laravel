@@ -7,10 +7,9 @@ use App\Models\backend\RoleType;
 use Crypt;
 use Illuminate\Http\Request;
 
-class RoleTypeController extends Controller
-{
+class RoleTypeController extends Controller{
     public function index(){
-        $role_types = RoleType::whereNotIn('id', [3, 4])->get();
+        $role_types = RoleType::whereNotIn('id', [1, 3, 4])->get();
             return view('backend.role_type.index', compact('role_types'));
         }
 

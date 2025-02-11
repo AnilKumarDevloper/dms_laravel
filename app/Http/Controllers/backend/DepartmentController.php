@@ -26,11 +26,21 @@ class DepartmentController extends Controller{
         try{
             $permission_check = UserPermission::where('user_id', Auth::user()->id)->where('menu_id', 38)->exists();
             if($permission_check){
-            $roles = DepartmentType::orderBy('id', 'desc')->get();
-            
+            $roles = DepartmentType::orderBy('id', 'desc')->get()->map(function ($role){
+                return [
+                    'id' => $role->id,
+                    'encrypt_id' => Crypt::encrypt($role->id),
+                    'name' => $role->name,
+                    'short_name' => $role->short_name,
+                    'user_id' => $role->user_id,
+                    'status' => $role->status,
+                ];
+            });
+            $role_type_id = Auth::user()->role_type_id;
             return response()->json([
                 "status" => "success",
-                "data" => $roles
+                "data" => $roles,
+                "role_type_id" => $role_type_id
             ], 200);
              }else{
                 return response()->json([
@@ -142,8 +152,7 @@ class DepartmentController extends Controller{
     public function destroy(Request $request){
         try{
         $decrypt_id = $request->id;
-        // $permission_check = UserPermission::where('user_id', Auth::user()->id)->where('menu_id', 43)->exists();
-        //     if($permission_check){
+        if(Auth::user()->role_type_id == 1){
             $user = User::where('department_type_id', $decrypt_id)->exists();
             if($user){
                 return response()->json([
@@ -162,10 +171,10 @@ class DepartmentController extends Controller{
             return response()->json([
                 "status" => "success",
                 "message" => "Department has been Deleted successfully"
-            ], 200);
-             // }else{
-            //     return response()->view('errors.405', [], 405);
-            // }
+            ], 200); 
+        }else{
+            abort('405'); 
+        }
         }catch(\Exception $e){
             abort('404');
         }
