@@ -43,7 +43,7 @@ class UserProfileController extends Controller
         ]); 
         
         if($request->hasFile('profile_image')){
-            $profile_name = time().''.$request->file('profile_image')->getClientOriginalExtension();
+            $profile_name = time().'.'.$request->file('profile_image')->getClientOriginalExtension();
             $request->file('profile_image')->move(public_path('assets/backend/assets/images/upload/profile_image'), $profile_name);
             User::where('id', Auth::user()->id)->update([
                 "profile_image" => $profile_name
