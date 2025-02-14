@@ -24,16 +24,16 @@ class AppServiceProvider extends ServiceProvider
     /**
      * Bootstrap any application services.
      */
-    public function boot(): void
-    {
-        View::composer('*', function ($view) {
-            $departments = SubFolder::get();
-            $main_folders = MainFolder::with('getSubFolder')->orderBy('name')->get();
+    public function boot(): void{
+        
+    //     View::composer('*', function ($view) {
+    //         $departments = SubFolder::get();
+    //         $main_folders = MainFolder::with('getSubFolder')->orderBy('name')->get();
             
-            $view->with([
-                'departments' => $departments, 
-                'main_folders' => $main_folders
-            ]);
-    });
+    //         $view->with([
+    //             'departments' => $departments, 
+    //             'main_folders' => $main_folders
+    //         ]);
+    // });
 }
 }

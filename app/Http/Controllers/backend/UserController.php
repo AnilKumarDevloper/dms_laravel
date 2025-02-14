@@ -40,7 +40,6 @@ class UserController extends Controller
     }
 
     public function store(Request $request){
-        try{
         $request->validate([
             'f_name' => ['required', 'string', 'max:20', 'regex:/^[a-zA-Z\s]+$/'],
             'l_name' => ['required', 'string', 'max:20', 'regex:/^[a-zA-Z\s]+$/'],
@@ -48,7 +47,8 @@ class UserController extends Controller
             'phone' => ['required', 'numeric', 'digits:10', 'unique:'.User::class],
             'role_type' => ['required']
         ]);
-
+        
+        try{
         $randompassword = substr(str_shuffle('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'), 0, 10);
         $password = Hash::make($randompassword); 
         $role_type =  $request->role_type;
@@ -383,7 +383,7 @@ class UserController extends Controller
         Mail::to($request->email)->send(new SendPasswordToAdminMail($user_detail_mail_data));
         return redirect()->back()->with('created', 'Team Member has benn created.');
         }
-    }catch(\Exception $e){
+    }catch(\Exception $e){ 
         return "Something went wrong";
     }
     }

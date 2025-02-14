@@ -160,17 +160,9 @@
                             </div>
                         </div>
                     </div>
-        </div>
-      
-
-
-      
-        
+        </div> 
      
-    @section('javascript-section')
-    
-
-
+    @section('javascript-section') 
       <script>
         async function fetchChartData(){
             try{
@@ -223,14 +215,9 @@
             }
         } 
         fetchChartData();
+    </script> 
+    <script> 
     </script>
-
-
-    <script>
-       
-    </script>
- 
-
-
+  
     @endsection
         @endsection

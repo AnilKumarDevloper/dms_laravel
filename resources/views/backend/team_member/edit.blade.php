@@ -108,14 +108,12 @@
                                             <p style="color:red;">{{$message}}</p>
                                         @enderror
                                     </div>
-
  
-
                                     <div class="mb-3 col-md-6" id="manager_section">
                                         <lable>Manager</lable>
                                         <select name="manager" class="select2 hotel form-control" style="width: 100%;" id="manager" onchange="getTeamLeaderList();">
                                             @if(Auth::user()->role_type_id == 1 || Auth::user()->role_type_id == 2)
-                                                <option value="">--Select--</option>  
+                                                <option value="">--Select--</option>
                                                 @foreach($managers as $manager)
                                                     <option value="{{$manager->id}}" {{$manager->id == $team_member->manager_id ? "selected":""}}>{{$manager->first_name .' '. $manager->last_name}}</option>
                                                 @endforeach 

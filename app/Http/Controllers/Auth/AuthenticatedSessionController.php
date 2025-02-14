@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Models\backend\DepartmentType;
 use App\Models\backend\LoginAudit;
 use App\Models\backend\Notification;
 use App\Models\User;
@@ -29,16 +30,29 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request): RedirectResponse{
         // $request->authenticate();
-        // $request->session()->regenerate(); 
+        // $request->session()->regenerate();
         $credentials = $request->only('email', 'password');
         $remember = $request->filled('remember');
-        $user = User::where('email', $request->email)->first();
-        if (!$user){
+        $user = User::where('email', $request->email)->first(); 
+        if(!$user){
             return back()->withErrors([
                 'email' => 'This Email id does not exist.',
             ]);
-        } 
-        if (Auth::attempt($credentials, $remember)) {
+        }else{
+            $departmet = DepartmentType::where('id', $user->department_type_id)->first();
+            if($departmet){ 
+                if($departmet->status != 1){
+                    return back()->withErrors([
+                        'email' => 'Your department is currently inactive. Please contact the administrator for assistance.',
+                    ]);
+                }
+            }elseif($user->role_type_id != 1){
+                return back()->withErrors([
+                    'email' => 'You dont have any department. Please contact the administrator for assistance.',
+                ]);
+            }
+        }
+        if (Auth::attempt($credentials, $remember)){
             $request->session()->regenerate(); 
             Notification::create([
                 "user_id" => Auth::user()->id,
@@ -48,17 +62,17 @@ class AuthenticatedSessionController extends Controller
                 "icon" => '<i class="fa fa-sign-in" aria-hidden="true"></i>',
                 "read_status" => 0,
                 "status" => 1,
-            ]); 
+            ]);
             $ipAddress = $request->ip();
             LoginAudit::create([
                 "user_id" => Auth::user()->id,
                 "email" => Auth::user()->email,
                 "ip" => $ipAddress,
-            ]); 
+            ]);
             return redirect()->intended(RouteServiceProvider::HOME);
-        } return back()->withErrors([ 
+        }return back()->withErrors([
             'password' => 'Wrong Password.',
-        ]); 
+        ]);
     }
 
     /**

@@ -43,6 +43,7 @@ class TeamMemberController extends Controller{
             if(Auth::user()->role_type_id == 6){
                 return response()->view('errors.405', [], 405);
             }
+          
             $decrypt_id = Crypt::decrypt($id);
             $head_departments = User::where('role_type_id', 2)->get();
             $team_member = User::with(['getDepartmentType', 'getHead', 'getUnit', 'getManager', 'getTeamLeader'])
@@ -52,6 +53,8 @@ class TeamMemberController extends Controller{
                     $managers = User::where('head_department_id', $team_member->head_department_id)
                     ->where('unit_id', $team_member->unit_id)
                     ->where('role_type_id', 5)->get();
+                }else{
+                    $managers = User::where('role_type_id', 5)->get();
                 }
             $team_leaders = User::where('head_department_id', $team_member->head_department_id)
             ->where('unit_id', $team_member->unit_id);
@@ -74,6 +77,7 @@ class TeamMemberController extends Controller{
             return view('backend.team_member.edit', compact(['team_member',
             'head_departments', 'managers', 'team_leaders', 'units', 'role_types', 'department_types']));  
         }catch(\Exception $e){
+            return $e->getMessage();
             abort('404');
         }
     }

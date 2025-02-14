@@ -27,14 +27,14 @@ class CustomPermissionController extends Controller{
         $new_permissions = $request->permission_ids;
         UserPermission::where('user_id', $user_id)->delete(); 
         if($new_permissions != null){
-        foreach($new_permissions as $permission){
-            UserPermission::create([
-                'menu_id' => $permission,
-                'user_id' => $user_id,
-                'status' => 1
-            ]);
+            foreach($new_permissions as $permission){
+                UserPermission::create([
+                    'menu_id' => $permission,
+                    'user_id' => $user_id,
+                    'status' => 1
+                ]);
+            }
         }
-    } 
         return redirect()->back()->with('updated', 'Permission has been updated !');
     }
 }

@@ -33,7 +33,7 @@ use App\Http\Controllers\Controller;
 use App\Models\backend\FolderPermission;
 
 
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth', 'verified', 'dtsc'])->group(function () {
     Route::get('admin/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
     Route::get('dashboard', [DashboardController::class, 'redirectDashboard'])->name('dashboard');
     Route::get('/admin', [DashboardController::class, 'redirectDashboard'])->name('dashboard');

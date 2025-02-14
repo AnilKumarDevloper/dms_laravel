@@ -61,6 +61,7 @@
                                             </td>
                                         </tr>
                                     @endforeach -->
+                                   
                                 </tbody>
                             </table> 
                             <!-- {{$cities->links("pagination::bootstrap-5")}} -->
@@ -81,6 +82,8 @@
 @section('javascript-section')
     @if  (Session::has('updated'))
         <script>
+
+
             Swal.fire({
                 title: "Success!",
                 text: "{{ Session::get('updated') }}",
@@ -92,6 +95,8 @@
 
          <script>
     /// sweet alert function 
+ 
+ 
  
        $(document).on('change', '#status', async function(){
             const id = $(this).data('id');
