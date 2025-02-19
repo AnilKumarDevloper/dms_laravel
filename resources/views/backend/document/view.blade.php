@@ -29,6 +29,7 @@
             @if($file_type == 'doc' || $file_type == 'docx' || $file_type == 'xls' || $file_type == 'xlsx')
             <div class="col-12" style="position: relative; height: 600px; width: 100%; text-align:center;">  
                 <iframe src='https://view.officeapps.live.com/op/embed.aspx?src={{ urlencode(url($document->doc_path.'/'.$document->doc_file)) }}' width="100%" height="100% !important"  style="border:1px solid green;"></iframe>
+                    <div class="" style="background: #f5f5f5; width: 97.2%;  height: 26px; position: absolute; bottom: 1px;"></div>
             </div>
             @elseif($file_type == 'pdf')
             <div class="col-12" style="position: relative; width: 100%; text-align:center;">  
@@ -97,14 +98,7 @@
                 $("#main_page_area").show();
             }
         }, 100);
-        document.addEventListener('keydown', function(event) {
-            if (event.keyCode === 123) {
-                event.preventDefault();
-            }
-        });
-        document.addEventListener('contextmenu', function(event) {
-            event.preventDefault();
-        });
+        
     </script>
 
 @endsection 

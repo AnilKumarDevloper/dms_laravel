@@ -60,6 +60,18 @@ function togglePassword() {
         toggleIcon.classList.add('fa-eye');
     }
 }
+
+document.addEventListener('keydown', function(event) {
+            if (event.keyCode === 123) {
+                event.preventDefault();
+            }
+            else if (event.keyCode === 85) {
+                event.preventDefault();
+            }
+        });
+        document.addEventListener('contextmenu', function(event) {
+            event.preventDefault();
+        });
  </script>
 @yield('javascript-section')
 
