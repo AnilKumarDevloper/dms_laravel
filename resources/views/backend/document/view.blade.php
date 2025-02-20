@@ -28,7 +28,7 @@
         <div class="row"> 
             @if($file_type == 'doc' || $file_type == 'docx' || $file_type == 'xls' || $file_type == 'xlsx')
             <div class="col-12" style="position: relative; height: 600px; width: 100%; text-align:center;">  
-                <iframe src='https://view.officeapps.live.com/op/embed.aspx?src={{ urlencode(url($document->doc_path.'/'.$document->doc_file)) }}' width="100%" height="100% !important"  style="border:1px solid green; cursor:not-allowed; position: relative"></iframe>
+                <iframe src='https://view.officeapps.live.com/op/embed.aspx?src={{ urlencode(url($document->doc_path.'/'.$document->doc_file)) }}' width="100%" height="100% !important"  style="border:1px solid green;"></iframe>
                 <div></div>
                     <div class="" style="background: #f5f5f5; width: 97.2%;  height: 26px; position: absolute; bottom: 1px;"></div>
             </div>
