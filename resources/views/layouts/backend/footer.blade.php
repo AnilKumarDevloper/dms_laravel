@@ -65,7 +65,13 @@ document.addEventListener('keydown', function(event) {
             if (event.keyCode === 123) {
                 event.preventDefault();
             }
-            else if (event.keyCode === 85) {
+            else if (event.ctrlKey && event.keyCode === 85) {
+                event.preventDefault();
+            }
+            else if (event.ctrlKey && event.keyCode === 67) { 
+                event.preventDefault();
+            }
+            else if (event.ctrlKey && event.keyCode === 86) {
                 event.preventDefault();
             }
         });

@@ -312,22 +312,23 @@ class DocumentController extends Controller{
                 'file_type', 'can_download')); 
             }elseif( Auth::user()->role_type_id == 2){
                 $owner = User::where('id', $doc->owner_id)->first();
-                if($owner->head_department_id == Auth::user()->id){
+                $doc_with_per = Document::with('getMainFolder:id,name', 'getSubFolder:id,name')
+                ->where('doc_file', $decrypt_file)->whereJsonContains('assigned_users', Auth::user()->id)->first();
+                if($owner->head_department_id == Auth::user()->id || $owner->role_type_id == 1 || $doc_with_per){
                     return view('backend.document.view', compact('document',
                     'file_type', 'can_download')); 
                 }else{
                     return response()->view('errors.405', [], 405);
                 }
-            }
-            else{
+            }else{
                 // $permission_check = DocumentPermission::where('user_id', Auth::user()->id)
                 // ->where('read', 1)->where('document_id', $doc->id)->exists();
-                // if($permission_check){ 
+                // if($permission_check){
                     $document = Document::with('getMainFolder:id,name', 'getSubFolder:id,name')
                     ->where('doc_file', $decrypt_file)->whereJsonContains('assigned_users', Auth::user()->id);
                     // if(Auth::user()->role_type_id != 1){
                     //     $document = $document->whereJsonContains('assigned_users', Auth::user()->id);
-                    // } 
+                    // }
                     $document = $document->first();
                     $this->documentAuditService->CreateDocumentAudit(
                         Auth::user()->id,
@@ -336,12 +337,12 @@ class DocumentController extends Controller{
                         $doc->main_folder_id,
                         $doc->sub_folder_id,
                         "view" 
-                    ); 
+                    );
                     $chek_wirte_permision = DocumentPermission::where('user_id', Auth::user()->id)
                     ->where('document_id', $doc->id)->where('write', 1)->exists();
                      if($chek_wirte_permision){
                             $can_download = 1;
-                     } 
+                     }
                     if($document){
                         return view('backend.document.view', compact('document','file_type', 'can_download'));
                     }else{
